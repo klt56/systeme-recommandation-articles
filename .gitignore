@@ -1,0 +1,23 @@
+# Environnements
+.venv/
+.venv310/
+
+# Données
+data/
+news-portal-user-interactions-by-globocom/
+*.pickle
+*.npy
+*.parquet
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Azure
+local.settings.json
+.azure/
+bin/
+obj/
