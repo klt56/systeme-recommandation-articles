@@ -61,7 +61,7 @@ Le fichier d'embeddings d'origine pèse 364 Mo, incompatible avec les limites du
 | **50** | **94,5 %** |
 | 100 | 98,7 % |
 
-À 50 composantes, le fichier passe à 72,8 Mo pour 94,5 % de variance conservée. Les recommandations produites partagent en moyenne 3 articles sur 5 avec celles calculées sur les embeddings complets.
+À 50 composantes, le fichier passe à 72,8 Mo pour 94,5 % de variance conservée. Sur un utilisateur témoin, deux des cinq articles recommandés sont communs aux deux versions, dont celui de tête. avec celles calculées sur les embeddings complets.
 
 ---
 
