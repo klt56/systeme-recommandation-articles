@@ -1,4 +1,4 @@
-Système de recommandation d'articles (My Content)
+# Système de recommandation d'articles (My Content)
 
 MVP d'un système de recommandation d'articles de presse, déployé en architecture serverless sur Azure Functions.
 
@@ -67,7 +67,7 @@ Le fichier d'embeddings d'origine pèse 364 Mo, incompatible avec les limites du
 
 ## Architecture MVP
 
-<img width="223" height="150" alt="archi_mvp" src="https://github.com/user-attachments/assets/65b7fccd-96a5-4947-91af-a2c3aaba234c" />
+<img width="223" height="150" alt="archi_mvp" src="https://github.com/user-attachments/assets/77524dac-2271-4494-aeda-b0d271b0dc61" />
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" font-family="Segoe UI, Helvetica, Arial, sans-serif">
   <rect width="980" height="660" fill="#ffffff"/>
 
@@ -210,118 +210,7 @@ La réponse JSON expose la méthode employée, ce qui rend le comportement obser
 
 ## Architecture cible
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 850" font-family="Segoe UI, Helvetica, Arial, sans-serif">
-  <rect width="1140" height="850" fill="#ffffff"/>
-
-  <text x="570" y="40" text-anchor="middle" font-size="23" font-weight="600" fill="#1a1a2e">Architecture cible — My Content</text>
-  <text x="570" y="63" text-anchor="middle" font-size="13" fill="#666">Prise en compte des nouveaux utilisateurs et des nouveaux articles</text>
-
-  <!-- ============ INGESTION ============ -->
-  <rect x="56" y="92" width="300" height="210" rx="8" fill="#f2f8f4" stroke="#8ab89a" stroke-width="1.5"/>
-  <text x="72" y="114" font-size="11.5" font-weight="600" fill="#3f7a54">INGESTION CONTINUE</text>
-
-  <rect x="74" y="128" width="264" height="46" rx="6" fill="#ffffff" stroke="#7aad8c" stroke-width="1.5"/>
-  <text x="206" y="147" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2f5c40">Publication d'articles</text>
-  <text x="206" y="164" text-anchor="middle" font-size="10.5" fill="#6b7a99">CMS éditorial · flux temps réel</text>
-
-  <rect x="74" y="184" width="264" height="46" rx="6" fill="#ffffff" stroke="#7aad8c" stroke-width="1.5"/>
-  <text x="206" y="203" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2f5c40">Collecte des interactions</text>
-  <text x="206" y="220" text-anchor="middle" font-size="10.5" fill="#6b7a99">clics · sessions · Event Hub</text>
-
-  <rect x="74" y="240" width="264" height="48" rx="6" fill="#ffffff" stroke="#7aad8c" stroke-width="1.5"/>
-  <text x="206" y="259" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2f5c40">Encodage des nouveaux articles</text>
-  <text x="206" y="276" text-anchor="middle" font-size="10.5" fill="#6b7a99">modèle NLP → embedding + ACP</text>
-
-  <!-- ============ REENTRAINEMENT ============ -->
-  <rect x="406" y="92" width="310" height="210" rx="8" fill="#f4f6fb" stroke="#8b9dc3" stroke-width="1.5"/>
-  <text x="422" y="114" font-size="11.5" font-weight="600" fill="#5a6784">RÉENTRAÎNEMENT PÉRIODIQUE</text>
-
-  <rect x="424" y="128" width="274" height="56" rx="6" fill="#ffffff" stroke="#8b9dc3" stroke-width="1.5"/>
-  <text x="561" y="147" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2c3e57">Calcul distribué</text>
-  <text x="561" y="164" text-anchor="middle" font-size="10.5" fill="#6b7a99">Azure Databricks / Synapse</text>
-  <text x="561" y="179" text-anchor="middle" font-size="10.5" fill="#6b7a99">ALS sur la population complète</text>
-
-  <rect x="424" y="194" width="274" height="46" rx="6" fill="#ffffff" stroke="#8b9dc3" stroke-width="1.5"/>
-  <text x="561" y="213" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2c3e57">Précalcul des top-5</text>
-  <text x="561" y="230" text-anchor="middle" font-size="10.5" fill="#6b7a99">un jeu de recommandations par user</text>
-
-  <rect x="424" y="250" width="274" height="38" rx="6" fill="#fffbe8" stroke="#d9c165" stroke-width="1.3"/>
-  <text x="561" y="274" text-anchor="middle" font-size="10.5" fill="#7a6a20">Déclenchement : Timer Trigger (quotidien)</text>
-
-  <!-- ============ STOCKAGE ============ -->
-  <rect x="766" y="92" width="310" height="210" rx="8" fill="#eef4fc" stroke="#7aa5d2" stroke-width="1.5"/>
-  <text x="782" y="114" font-size="11.5" font-weight="600" fill="#2b5f92">STOCKAGE SERVANT</text>
-
-  <rect x="784" y="128" width="274" height="68" rx="6" fill="#ffffff" stroke="#4a86c8" stroke-width="2"/>
-  <text x="921" y="150" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f4e79">Cosmos DB</text>
-  <text x="921" y="167" text-anchor="middle" font-size="10.5" fill="#6b7a99">clé : user_id</text>
-  <text x="921" y="183" text-anchor="middle" font-size="10.5" fill="#6b7a99">valeur : 5 articles + horodatage</text>
-
-  <rect x="784" y="206" width="274" height="80" rx="6" fill="#ffffff" stroke="#4a86c8" stroke-width="1.5"/>
-  <text x="921" y="227" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f4e79">Blob Storage</text>
-  <text x="921" y="244" text-anchor="middle" font-size="10.5" fill="#6b7a99">embeddings réduits, tenus à jour</text>
-  <text x="921" y="260" text-anchor="middle" font-size="10.5" fill="#6b7a99">top popularité glissant</text>
-  <text x="921" y="276" text-anchor="middle" font-size="10.5" fill="#6b7a99">versionné par date</text>
-
-  <!-- ============ SERVICE ============ -->
-  <rect x="250" y="360" width="640" height="272" rx="8" fill="#eef4fc" stroke="#7aa5d2" stroke-width="1.5"/>
-  <text x="266" y="382" font-size="11.5" font-weight="600" fill="#2b5f92">SERVICE DE RECOMMANDATION — Azure Function</text>
-
-  <rect x="270" y="396" width="600" height="46" rx="6" fill="#ffffff" stroke="#4a86c8" stroke-width="1.5"/>
-  <text x="570" y="415" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f4e79">HTTP trigger /api/recommend</text>
-  <text x="570" y="432" text-anchor="middle" font-size="10.5" fill="#6b7a99">Cosmos DB input binding · Blob input binding</text>
-
-  <text x="270" y="462" font-size="11" font-weight="600" fill="#44546a">Cascade de résolution</text>
-
-  <rect x="270" y="470" width="600" height="46" rx="5" fill="#e8f5e9" stroke="#66a86e" stroke-width="1.2"/>
-  <text x="284" y="490" font-size="11.5" font-weight="600" fill="#2e6b36">1 · Lecture directe en Cosmos DB</text>
-  <text x="284" y="507" font-size="10.5" fill="#4a7c52">utilisateur présent dans le dernier batch — latence minimale, aucun calcul</text>
-
-  <rect x="270" y="524" width="600" height="46" rx="5" fill="#fff6e5" stroke="#d9a441" stroke-width="1.2"/>
-  <text x="284" y="544" font-size="11.5" font-weight="600" fill="#8a6316">2 · Content-based à la volée</text>
-  <text x="284" y="561" font-size="10.5" fill="#a07b2c">utilisateur arrivé depuis le dernier batch, au moins un clic — couvre aussi les articles récents</text>
-
-  <rect x="270" y="578" width="600" height="46" rx="5" fill="#fdecec" stroke="#cc7a7a" stroke-width="1.2"/>
-  <text x="284" y="598" font-size="11.5" font-weight="600" fill="#8f3b3b">3 · Popularité récente</text>
-  <text x="284" y="615" font-size="10.5" fill="#a85555">aucun historique — fenêtre glissante sur les dernières heures</text>
-
-  <!-- ============ CLIENT ============ -->
-  <rect x="250" y="670" width="640" height="66" rx="8" fill="#f7f4fb" stroke="#a98fc4" stroke-width="1.5"/>
-  <text x="570" y="695" text-anchor="middle" font-size="12.5" font-weight="600" fill="#553875">Application My Content (web / mobile)</text>
-  <text x="570" y="715" text-anchor="middle" font-size="10.5" fill="#6b7a99">appel authentifié via API Management · 5 articles retournés</text>
-
-  <!-- ============ FLECHES ============ -->
-  <path d="M356 197 L402 197" stroke="#7aad8c" stroke-width="1.8" marker-end="url(#g)"/>
-  <path d="M716 197 L762 197" stroke="#8b9dc3" stroke-width="1.8" marker-end="url(#b)"/>
-
-  <path d="M921 302 L921 376 L894 376" stroke="#4a86c8" stroke-width="1.6" fill="none" marker-end="url(#b)"/>
-  <text x="934" y="344" font-size="10.5" fill="#4a86c8">bindings</text>
-
-  <path d="M570 670 L570 638" stroke="#9b7cc0" stroke-width="1.8" marker-end="url(#p)"/>
-
-  <path d="M250 703 L26 703 L26 207 L52 207" stroke="#7aad8c" stroke-width="1.5" fill="none" stroke-dasharray="6 4" marker-end="url(#g)"/>
-  <text x="42" y="452" font-size="10.5" fill="#5c8f6e" transform="rotate(-90 42 452)" text-anchor="middle">retour des clics → alimente le prochain batch</text>
-
-  <!-- ============ LEGENDE ============ -->
-  <rect x="30" y="760" width="1080" height="76" rx="6" fill="#fafbfd" stroke="#dde2ec"/>
-  <text x="48" y="784" font-size="11.5" font-weight="600" fill="#44546a">Réponse aux deux contraintes de l'énoncé</text>
-  <text x="48" y="806" font-size="11" fill="#6b7a99">Nouvel utilisateur — absent de Cosmos DB entre deux batchs, il est servi par la branche 2 dès son premier clic, puis intégré au précalcul suivant.</text>
-  <text x="48" y="824" font-size="11" fill="#6b7a99">Nouvel article — encodé dès sa publication, il devient recommandable par la branche 2 sans attendre le réentraînement du modèle collaboratif.</text>
-
-  <defs>
-    <marker id="g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#7aad8c"/>
-    </marker>
-    <marker id="b" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#4a86c8"/>
-    </marker>
-    <marker id="p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#9b7cc0"/>
-    </marker>
-  </defs>
-</svg>
-
-
+![Architecture cible](docs/archi_cible.png)
 
 L'architecture MVP calcule tout à la demande et s'appuie sur des fichiers figés. En production, deux évolutions s'imposent.
 
