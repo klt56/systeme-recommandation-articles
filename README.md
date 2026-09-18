@@ -210,7 +210,7 @@ La réponse JSON expose la méthode employée, ce qui rend le comportement obser
 
 ## Architecture cible
 
-![Upl<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 850" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 850" font-family="Segoe UI, Helvetica, Arial, sans-serif">
   <rect width="1140" height="850" fill="#ffffff"/>
 
   <text x="570" y="40" text-anchor="middle" font-size="23" font-weight="600" fill="#1a1a2e">Architecture cible — My Content</text>
@@ -320,7 +320,7 @@ La réponse JSON expose la méthode employée, ce qui rend le comportement obser
     </marker>
   </defs>
 </svg>
-oading archi_cible.svg…]()
+
 
 
 L'architecture MVP calcule tout à la demande et s'appuie sur des fichiers figés. En production, deux évolutions s'imposent.
