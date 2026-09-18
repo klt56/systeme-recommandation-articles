@@ -1,4 +1,4 @@
-<img width="201" height="150" alt="archi_cible" src="https://github.com/user-attachments/assets/5b736456-c453-4e84-9238-7ebbd0393e8c" /># Système de recommandation d'articles (My Content)
+Système de recommandation d'articles (My Content)
 
 MVP d'un système de recommandation d'articles de presse, déployé en architecture serverless sur Azure Functions.
 
